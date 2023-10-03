@@ -1,0 +1,32 @@
+name: Scrape Debian Wiki News
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Run daily at midnight (adjust as needed)
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x' # Choose the Python version you need
+
+    - name: Install dependencies
+      run: pip install requests beautifulsoup4
+
+    - name: Run the script
+      run: python scrape_debian_news.py # Replace with your script's filename
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Update Debian Wiki News"
+        git push
