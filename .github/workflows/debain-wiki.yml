@@ -34,8 +34,12 @@ jobs:
     - name: Commit and push changes
       run: |
         python debian-wiki.py > debian_news_$(date +"%Y-%m-%d").md
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add debian_news_$(date +"%Y-%m-%d").md
-        git commit -m "Update Debian Wiki News"
-        git push https://github.com/NShravanReddy/debian-wiki.git HEAD:main --follow-tags ${{ secrets.debian_wiki }}
+        if git diff --quiet; then
+          echo "No changes in Debian Wiki News content."
+        else
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add debian_news_$(date +"%Y-%m-%d").md
+          git commit -m "Update Debian Wiki News"
+          git push https://github.com/NShravanReddy/debian-wiki.git HEAD:main --follow-tags ${{ secrets.debian_wiki }}
+        fi
