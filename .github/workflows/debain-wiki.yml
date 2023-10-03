@@ -38,4 +38,4 @@ jobs:
         git config --local user.name "GitHub Action"
         git add debian_news_$(date +"%Y-%m-%d").md
         git commit -m "Update Debian Wiki News"
-        git push https://github.com/NShravanReddy/debian-wiki.git HEAD:main --follow-tags ${{ secrets.debain_wiki }}
+        git push https://github.com/NShravanReddy/debian-wiki.git HEAD:main --follow-tags ${{ secrets.debian_wiki }}
