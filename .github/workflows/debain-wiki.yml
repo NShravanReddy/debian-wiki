@@ -24,4 +24,4 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run Script
-        run: python debian_wiki.py
+        run: python debian-wiki.py
