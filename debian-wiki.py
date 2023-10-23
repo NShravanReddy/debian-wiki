@@ -1,34 +1,48 @@
 import requests
 from bs4 import BeautifulSoup
+import os
 
 # URL of the Debian Wiki News page
-url = "https://wiki.debian.org/News"
+WIKI_URL = "https://wiki.debian.org/DebianNews"
 
-# Send an HTTP GET request to fetch the page content
-response = requests.get(url)
+# Function to fetch and parse the web page
+def fetch_debian_news():
+    try:
+        # Send an HTTP GET request to the wiki page
+        response = requests.get(WIKI_URL)
 
-# Check if the request was successful
-if response.status_code == 200:
-    # Parse the HTML content of the page
-    soup = BeautifulSoup(response.text, 'html.parser')
+        # Check if the request was successful
+        response.raise_for_status()
 
-    # Find the content section (usually inside a <div> with id="content")
-    content_div = soup.find('div', {'id': 'content'})
+        # Parse the page content with BeautifulSoup
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-    if content_div:
-        # Extract the text content from the HTML
-        content_text = content_div.get_text()
+        # Find the main content section
+        content = soup.find(id='content')
 
-        # Define the Markdown file name
-        markdown_file_name = "debian_news.md"
+        # Extract the formatted content
+        formatted_content = content.prettify()
 
-        # Write the content to a Markdown file
-        with open(markdown_file_name, "w", encoding="utf-8") as markdown_file:
-            markdown_file.write(content_text)
+        return formatted_content
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred during the request: {str(e)}")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
-        print(f"Successfully scraped and saved the Debian News to {markdown_file_name}")
-    else:
-        print("Error: Couldn't find the content section on the page.")
-else:
-    print(f"Error: Failed to fetch the page (Status code {response.status_code}).")
+# Function to write the content to a Markdown file
+def write_to_markdown(content):
+    try:
+        with open("debian_news.md", "w", encoding="utf-8") as file:
+            file.write(content)
+        print("Debian News has been converted to Markdown and written to debian_news.md")
+    except Exception as e:
+        print(f"An error occurred while writing to the file: {str(e)}")
 
+# Main function
+def main():
+    news_content = fetch_debian_news()
+    if news_content:
+        write_to_markdown(news_content)
+
+if __name__ == "__main__":
+    main()
