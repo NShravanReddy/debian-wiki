@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import os
 
 # URL of the Debian Wiki News page
-WIKI_URL = "https://wiki.debian.org/DebianNews"
+WIKI_URL = "https://wiki.debian.org/News"
 
 # Function to fetch and parse the web page
 def fetch_debian_news():
